@@ -1,0 +1,24 @@
+{
+  "name": "@camkirk/badcube",
+  "version": "0.0.1",
+  "description": "literally the worst database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CamKirk/badcube.git"
+  },
+  "keywords": [
+    "database",
+    "nosql",
+    "filesystem"
+  ],
+  "author": "Cam Kirk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CamKirk/badcube/issues"
+  },
+  "homepage": "https://github.com/CamKirk/badcube#readme"
+}
