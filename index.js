@@ -4,22 +4,22 @@ exports.printMsg = function(){
 }
 let fs = require('fs');
 let path = require('path')
-let collec = './collections'
-let models = {}
+let collecDirectory = './collections'
+let collection = {}
 
-if(!fs.existsSync(collec)){
-	fs.mkdirSync(collec)
+if(!fs.existsSync(collecDirectory)){
+	fs.mkdirSync(collecDirectory)
 }
 
-fs.readdir(collec, (err,files) => {
+fs.readdir(collecDirectory, (err,files) => {
 	if (files === null) throw "no collections in folder"
 	console.log(files)
 
 	files.forEach((filename) => {
 		var nameArray = filename.split('.')
 		if (nameArray[nameArray.length-1]==='json'){
-			models[nameArray[0]]=require(path.join(__dirname,collec,nameArray[0]))
-			console.log(Object.keys(models))
+			collection[nameArray[0]]=require(path.join(__dirname,collecDirectory,nameArray[0]))
+			console.log(Object.keys(collection))
 		}
 		//check if json file,parse, verify parsed file, else return
 		//if json, check if file has things in it, else return
