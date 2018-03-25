@@ -1,7 +1,3 @@
-
-exports.printMsg = function(){
-	console.log("hello world");
-}
 let fs = require('fs');
 let path = require('path')
 let collecDirectory = './collections'
@@ -27,6 +23,6 @@ fs.readdir(collecDirectory, (err,files) => {
 		else{return}
 	})
 	console.log('badcube Successfully imported',collecNames)
+	exports.collections = collection
 });
 
-module.exports = collection;
