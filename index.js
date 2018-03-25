@@ -12,24 +12,21 @@ if(!fs.existsSync(collecDirectory)){
 }
 
 fs.readdir(collecDirectory, (err,files) => {
-	if (files === null) throw "no collections in folder"
-	console.log(files)
-
+	if (files === null) throw "no collection json files in folder"
+	let collecNames = []
 	files.forEach((filename) => {
-		var nameArray = filename.split('.')
+		let nameArray = filename.split('.')
 		if (nameArray[nameArray.length-1]==='json'){
-			collection[nameArray[0]]=require(path.join(__dirname,collecDirectory,nameArray[0]))
-			console.log(Object.keys(collection))
-		}
-		//check if json file,parse, verify parsed file, else return
-		//if json, check if file has things in it, else return
-		//if file has things in it, read in data
+			let tmp = require(path.join(__dirname,collecDirectory,nameArray[0]))
+			if(typeof tmp === "array"||typeof tmp ==="object"){
+
+					collection[nameArray[0]]= tmp
+					collecNames.push(filename)
+				}
+			}
+		else{return}
 	})
-})
-/*
-initialize fs
-CRUD
-i/o
+	console.log('badcube Successfully imported',collecNames)
+});
 
-
-*/
+module.exports = collection;
