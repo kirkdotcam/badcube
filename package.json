@@ -1,5 +1,5 @@
 {
-  "name": "@camkirk/badcube",
+  "name": "badcube",
   "version": "0.0.1",
   "description": "literally the worst database",
   "main": "index.js",
