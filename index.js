@@ -17,13 +17,15 @@ function Model(name,collectionRef,collectionObj){
 	this.name = name;
 	this.collectionRef = collectionRef;
 	this.collection = collectionObj;
+
 	this.find = function(queryObj){
-		return this.collection.find((element)=>{
+		return this.collection.find((element,index)=>{
 			let searchKey = Object.keys(queryObj)[0];
 			let searchValue = Object.values(queryObj)[0];
 			return  element[searchKey] === searchValue;
 		});
 	};
+
 	this.findAll = function(queryObj){
 		return this.collection.filter((element)=>{
 			let searchKey = Object.keys(queryObj)[0];
@@ -32,13 +34,16 @@ function Model(name,collectionRef,collectionObj){
 		});
 	};
 
-	this.insert = function(newObj){
-		if(typeof newObj === 'object'){
-
-		this.collection.push(newObj);
+	this.rewrite = function(){
 		fs.writeFileSync(this.collectionRef,JSON.stringify(this.collection));
 		this.collection=this.findAll({});
-		return newObj;
+	};
+
+	this.insert = function(newObj){
+		if(typeof newObj === 'object'){
+			this.collection.push(newObj);
+			this.rewrite()
+			return newObj;
 		}
 		else{throw "not an object"};
 	};
@@ -52,9 +57,19 @@ function Model(name,collectionRef,collectionObj){
 		}
 		else{throw "Did not insertMany an Array"};
 	};
-	this.update = function(queryObj, newObj){};
-	this.delete = function(queryObj){
 
+	this.update = function(queryObj, newObj){
+		let changeLoc = this.collection.indexOf(this.find(queryObj));
+		this.collection.splice(changeLoc,1,newObj);
+		this.rewrite()
+		return queryObj;
+	};
+
+	this.delete = function(queryObj){
+		let deleteLoc = this.collection.indexOf(this.find(queryObj));
+		this.collection.splice(deleteLoc,1)
+		this.rewrite()
+		return queryObj;
 	};
 
 	//i/o for future implementation
@@ -78,5 +93,5 @@ fs.readdirSync(collecDirectory)
 		else{return};
 	});
 
-console.log('badcube Successfully imported',collecNames);
+console.log('badcube successfully imported',collecNames);
 exports.collections = collection;
