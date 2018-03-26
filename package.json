@@ -1,0 +1,51 @@
+{
+  "_from": "badcube@0.1.0",
+  "_id": "badcube@0.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-RySaSEXuKstFvv0s9dAfFevsa9fJB3naSIDn2J6Fl4RKKJuAj0xKh+ljjUOXsUWzEAREWlNqCK+JF2nbQ+rCVw==",
+  "_location": "/badcube",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "badcube@0.1.0",
+    "name": "badcube",
+    "escapedName": "badcube",
+    "rawSpec": "0.1.0",
+    "saveSpec": null,
+    "fetchSpec": "0.1.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/badcube/-/badcube-0.1.0.tgz",
+  "_shasum": "ccea7d3a0acb9b880831b29ada7f46854a77db12",
+  "_spec": "badcube@0.1.0",
+  "_where": "/home/katanaphantom00/Documents/badexample",
+  "author": {
+    "name": "Cam Kirk"
+  },
+  "bugs": {
+    "url": "https://github.com/CamKirk/badcube/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "literally the worst database",
+  "homepage": "https://github.com/CamKirk/badcube#readme",
+  "keywords": [
+    "database",
+    "nosql",
+    "filesystem"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "badcube",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CamKirk/badcube.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.1.0"
+}
