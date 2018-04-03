@@ -51,7 +51,9 @@ function Model(name,collectionRef,collectionObj){
 	this.insertMany = function(arr){
 		if(Array.isArray(arr)){
 			arr.forEach((item)=>{
-				this.collection.push(item)
+				if(typeof item === 'object' && !Array.isArray(item)){
+					this.collection.push(item);
+				}
 			});
 			this.rewrite();
 			return arr;
@@ -62,15 +64,15 @@ function Model(name,collectionRef,collectionObj){
 	this.update = function(queryObj, newObj){
 		let queryResult = this.find(queryObj);
 		let queryLoc = this.collection.indexOf(queryResult);
-		let updatedObj = Object.assign(queryResult,newObj) 
+		let updatedObj = Object.assign(queryResult,newObj);
 		this.collection.splice(queryLoc,1,updatedObj);
-		this.rewrite()
+		this.rewrite();
 		return queryObj;
 	};
 
 	this.delete = function(queryObj){
 		let deleteLoc = this.collection.indexOf(this.find(queryObj));
-		this.collection.splice(deleteLoc,1)
+		this.collection.splice(deleteLoc,1);
 		this.rewrite()
 		return queryObj;
 	};
