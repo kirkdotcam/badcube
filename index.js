@@ -42,7 +42,7 @@ function Model(name,collectionRef,collectionObj){
 	this.insert = function(newObj){
 		if(typeof newObj === 'object'){
 			this.collection.push(newObj);
-			this.rewrite()
+			this.rewrite();
 			return newObj;
 		}
 		else{throw "not an object"};
@@ -51,16 +51,19 @@ function Model(name,collectionRef,collectionObj){
 	this.insertMany = function(arr){
 		if(Array.isArray(arr)){
 			arr.forEach((item)=>{
-				this.insert(item)
+				this.collection.push(item)
 			});
+			this.rewrite();
 			return arr;
 		}
 		else{throw "Did not insertMany an Array"};
 	};
 
 	this.update = function(queryObj, newObj){
-		let changeLoc = this.collection.indexOf(this.find(queryObj));
-		this.collection.splice(changeLoc,1,newObj);
+		let queryResult = this.find(queryObj);
+		let queryLoc = this.collection.indexOf(queryResult);
+		let updatedObj = Object.assign(queryResult,newObj) 
+		this.collection.splice(queryLoc,1,updatedObj);
 		this.rewrite()
 		return queryObj;
 	};
