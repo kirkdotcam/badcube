@@ -98,5 +98,13 @@ fs.readdirSync(collecDirectory)
 		else{return};
 	});
 
+function Schema (schemaObject){
+
+	//should take in a schema-type object, and create a new model with type restrictions for data entry
+	//we can use object.entries to grab each of the object's k-v pairs
+	//iterate through the pairs, check type entry, may have to edit the .insertMethod? 
+	
+};
+
 console.log('badcube successfully imported',collecNames);
 exports.collections = collection;
