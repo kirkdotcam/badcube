@@ -35,7 +35,7 @@ function Model(name,collectionRef,collectionObj){
 	};
 
 	this.rewrite = function(){
-		fs.writeFileSync(this.collectionRef,JSON.stringify(this.collection));
+		fs.writeFileSync(this.collectionRef,JSON.stringify(this.collection,null,2));
 		this.collection=this.findAll({});
 	};
 
