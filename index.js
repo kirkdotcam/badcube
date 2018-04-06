@@ -3,10 +3,7 @@ let path = require('path');
 let collecDirectory = './collections';
 let collection = {};
 
-if (!fs.existsSync(collecDirectory)) {
-	fs.mkdirSync(collecDirectory);
-}
-
+!fs.existsSync(collecDirectory) ? fs.mkdirSync(collecDirectory) : console.log('badcube found collections');
 
 function Model(modelName, collectionRef, collectionObj) {
 	// if(!this instanceof this.Model){
@@ -82,6 +79,24 @@ function Model(modelName, collectionRef, collectionObj) {
 	//this.toSQL = function(){}
 
 };
+function Schema(schema, name, collectionRef, collectionObj) {
+	Model.call(this, name, collectionRef, collectionObj);
+	this.schema = schema;
+	this.schemaCheck = function (queryObj) {
+		let entries = Object.entries(queryObj);
+		entries.forEach((valArr) => {
+			if(!Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]]) return false;
+		});
+		return true;
+	}
+	
+	
+	//Object.getPrototypeOf(submitted value).constructor === valArr[1]
+	//should take in a schema-type object, and create a new model with type restrictions for data entry
+	//we can use object.entries to grab each of the object's k-v pairs
+	//iterate through the pairs, check type entry, may have to edit the .insertMethod? 
+
+};
 
 let collecNames = [];
 fs.readdirSync(collecDirectory)
@@ -98,25 +113,6 @@ fs.readdirSync(collecDirectory)
 		else { return };
 	});
 
-
-function Schema(schema, name, collectionRef, collectionObj) {
-	Model.call(this, name, collectionRef, collectionObj);
-	this.schema = schema;
-	this.schemaCheck = function (queryObj) {
-		let entries = Object.entries(queryObj);
-		entries.forEach((valArr) => {
-			if(!Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]]) return false;
-		})
-		return true;
-	}
-
-	
-	//Object.getPrototypeOf(submitted value).constructor === valArr[1]
-	//should take in a schema-type object, and create a new model with type restrictions for data entry
-	//we can use object.entries to grab each of the object's k-v pairs
-	//iterate through the pairs, check type entry, may have to edit the .insertMethod? 
-
-};
 
 console.log('badcube successfully imported', collecNames);
 exports.collections = collection;
