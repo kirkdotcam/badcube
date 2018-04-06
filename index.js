@@ -99,14 +99,18 @@ fs.readdirSync(collecDirectory)
 	});
 
 
-function Schema(schema) {
-	Model.call(this,)
-	let entries = Object.entries(schema);
-	entries.forEach((valArr, index) => {
+function Schema(schema, name, collectionRef, collectionObj) {
+	Model.call(this, name, collectionRef, collectionObj);
+	this.schema = schema;
+	this.schemaCheck = function (queryObj) {
+		let entries = Object.entries(queryObj);
+		entries.forEach((valArr) => {
+			if(!Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]]) return false;
+		})
+		return true;
+	}
 
-		valArr[1]
-	})
-
+	
 	//Object.getPrototypeOf(submitted value).constructor === valArr[1]
 	//should take in a schema-type object, and create a new model with type restrictions for data entry
 	//we can use object.entries to grab each of the object's k-v pairs
