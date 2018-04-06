@@ -1,9 +1,11 @@
 let fs = require('fs');
 let path = require('path');
 let collecDirectory = './collections';
+let schemaDirectory = './schemas'
 let collection = {};
 
 !fs.existsSync(collecDirectory) ? fs.mkdirSync(collecDirectory) : console.log('badcube found collections');
+!fs.existsSync(schemaDirectory) ? fs.mkdirSync(schemaDirectory) : console.log('badcube found schemations');
 
 function Model(modelName, collectionRef, collectionObj) {
 	// if(!this instanceof this.Model){
@@ -84,17 +86,18 @@ function Schema(schema, name, collectionRef, collectionObj) {
 	this.schema = schema;
 	this.schemaCheck = function (queryObj) {
 		let entries = Object.entries(queryObj);
+		let bool = true;
 		entries.forEach((valArr) => {
-			if(!Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]]) return false;
+			if(!(Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]])) {bool = false};
 		});
-		return true;
+		return bool
 	}
-	
-	
+
+
 	//Object.getPrototypeOf(submitted value).constructor === valArr[1]
 	//should take in a schema-type object, and create a new model with type restrictions for data entry
 	//we can use object.entries to grab each of the object's k-v pairs
-	//iterate through the pairs, check type entry, may have to edit the .insertMethod? 
+	//iterate through the pairs, check type entry, may have to edit the .insertMethod?
 
 };
 
@@ -116,3 +119,5 @@ fs.readdirSync(collecDirectory)
 
 console.log('badcube successfully imported', collecNames);
 exports.collections = collection;
+exports.model = Model;
+exports.schema = Schema;
