@@ -35,7 +35,7 @@ function Model(modelName, collectionRef, collectionObj) {
 	};
 
 	this.insert = function (newObj) {
-		if (this instanceof Schema){
+		if (this instanceof Schema) {
 			this.schemaCheck(newObj);
 		}
 		if (typeof newObj === 'object') {
@@ -49,7 +49,7 @@ function Model(modelName, collectionRef, collectionObj) {
 	this.insertMany = function (arr) {
 		if (Array.isArray(arr)) {
 			arr.forEach((item) => {
-				if (this instanceof Schema){
+				if (this instanceof Schema) {
 					this.schemaCheck();
 				}
 				if (typeof item === 'object' && !Array.isArray(item)) {
@@ -79,6 +79,7 @@ function Model(modelName, collectionRef, collectionObj) {
 	};
 
 	//i/o for future implementation
+	//this.toCSV = function(){}
 	//this.toMongo = function(){}
 	//this.toSQL = function(){}
 
@@ -87,17 +88,11 @@ function Model(modelName, collectionRef, collectionObj) {
 function Schema(schema, name, collectionRef, collectionObj) {
 	Model.call(this, name, collectionRef, collectionObj);
 	this.schema = schema;
-	if (this.schema === undefined){throw "schema undefined"}
+	if (this.schema === undefined) { throw "schema undefined" }
 	this.schemaCheck = function (queryObj) {
 		let entries = Object.entries(queryObj);
 		entries.forEach((valArr) => {
-			console.log(this.schema)
-			console.log(valArr)
-			console.log('proto',Object.getPrototypeOf(valArr[1]).constructor)
-			console.log('schem',this.schema[valArr[0]])
-
-			console.log('schCheck',Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]])
-			if(!(Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]])) {throw "A Schema failure"};
+			if (!(Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]])) { throw "A Schema failure" };
 		});
 	}
 };
@@ -105,15 +100,13 @@ function Schema(schema, name, collectionRef, collectionObj) {
 let collecNames = [];
 let schemaNames = [];
 exports.collections = collection;
-exports.model = Model;
-exports.schema = Schema;
 
 fs.readdirSync(schemaDirectory)
-	.forEach((filename)=>{
+	.forEach((filename) => {
 		let tempName = filename.split('.')[0];
-		 let schemaRef = require(path.join('../../',schemaDirectory,filename));
-		 global[tempName] = new Schema(schemaRef[tempName],tempName,path.join(collecDirectory, tempName+'.json'),[]);
-		 global[tempName].findAll({});
+		let schemaRef = require(path.join('../../', schemaDirectory, filename));
+		global[tempName] = new Schema(schemaRef[tempName], tempName, path.join(collecDirectory, tempName + '.json'), []);
+		global[tempName].findAll({});
 		schemaNames.push(filename);
 	})
 
@@ -124,7 +117,7 @@ fs.readdirSync(collecDirectory)
 			let tmp = require(path.join('../../' + collecDirectory, nameArray[0]));
 			if (typeof tmp === "array" || typeof tmp === "object") {
 				let tempName = nameArray[0].charAt(0).toUpperCase() + nameArray[0].slice(1);
-				if (global[tempName]){return}
+				if (global[tempName]) { return }
 				global[tempName] = new Model(tempName, path.join(collecDirectory, filename), tmp);
 				collecNames.push(filename);
 			}
