@@ -8,10 +8,6 @@ let collection = {};
 !fs.existsSync(schemaDirectory) ? fs.mkdirSync(schemaDirectory) : console.log('badcube found schemations');
 
 function Model(modelName, collectionRef, collectionObj) {
-	// if(!this instanceof this.Model){
-	// 	return new Model(modelName)
-	// }
-
 
 	this.modelName = modelName;
 	this.collectionRef = collectionRef;
@@ -39,6 +35,9 @@ function Model(modelName, collectionRef, collectionObj) {
 	};
 
 	this.insert = function (newObj) {
+		if (this instanceof Schema){
+			this.schemaCheck(newObj);
+		}
 		if (typeof newObj === 'object') {
 			this.collection.push(newObj);
 			this.rewrite();
@@ -50,6 +49,9 @@ function Model(modelName, collectionRef, collectionObj) {
 	this.insertMany = function (arr) {
 		if (Array.isArray(arr)) {
 			arr.forEach((item) => {
+				if (this instanceof Schema){
+					this.schemaCheck();
+				}
 				if (typeof item === 'object' && !Array.isArray(item)) {
 					this.collection.push(item);
 				}
@@ -81,27 +83,40 @@ function Model(modelName, collectionRef, collectionObj) {
 	//this.toSQL = function(){}
 
 };
+
 function Schema(schema, name, collectionRef, collectionObj) {
 	Model.call(this, name, collectionRef, collectionObj);
 	this.schema = schema;
+	if (this.schema === undefined){throw "schema undefined"}
 	this.schemaCheck = function (queryObj) {
 		let entries = Object.entries(queryObj);
-		let bool = true;
 		entries.forEach((valArr) => {
-			if(!(Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]])) {bool = false};
+			console.log(this.schema)
+			console.log(valArr)
+			console.log('proto',Object.getPrototypeOf(valArr[1]).constructor)
+			console.log('schem',this.schema[valArr[0]])
+
+			console.log('schCheck',Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]])
+			if(!(Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]])) {throw "A Schema failure"};
 		});
-		return bool
 	}
-
-
-	//Object.getPrototypeOf(submitted value).constructor === valArr[1]
-	//should take in a schema-type object, and create a new model with type restrictions for data entry
-	//we can use object.entries to grab each of the object's k-v pairs
-	//iterate through the pairs, check type entry, may have to edit the .insertMethod?
-
 };
 
 let collecNames = [];
+let schemaNames = [];
+exports.collections = collection;
+exports.model = Model;
+exports.schema = Schema;
+
+fs.readdirSync(schemaDirectory)
+	.forEach((filename)=>{
+		let tempName = filename.split('.')[0];
+		 let schemaRef = require(path.join('../../',schemaDirectory,filename));
+		 global[tempName] = new Schema(schemaRef[tempName],tempName,path.join(collecDirectory, tempName+'.json'),[]);
+		 global[tempName].findAll({});
+		schemaNames.push(filename);
+	})
+
 fs.readdirSync(collecDirectory)
 	.forEach((filename) => {
 		let nameArray = filename.split('.');
@@ -109,6 +124,7 @@ fs.readdirSync(collecDirectory)
 			let tmp = require(path.join('../../' + collecDirectory, nameArray[0]));
 			if (typeof tmp === "array" || typeof tmp === "object") {
 				let tempName = nameArray[0].charAt(0).toUpperCase() + nameArray[0].slice(1);
+				if (global[tempName]){return}
 				global[tempName] = new Model(tempName, path.join(collecDirectory, filename), tmp);
 				collecNames.push(filename);
 			}
@@ -118,6 +134,4 @@ fs.readdirSync(collecDirectory)
 
 
 console.log('badcube successfully imported', collecNames);
-exports.collections = collection;
-exports.model = Model;
-exports.schema = Schema;
+console.log('badcube successfully imported', schemaNames);
