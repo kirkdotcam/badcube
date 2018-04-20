@@ -50,7 +50,7 @@ function Model(modelName, collectionRef, collectionObj) {
 		if (Array.isArray(arr)) {
 			arr.forEach((item) => {
 				if (this instanceof Schema) {
-					this.schemaCheck();
+					this.schemaCheck(item);
 				}
 				if (typeof item === 'object' && !Array.isArray(item)) {
 					this.collection.push(item);
@@ -88,12 +88,12 @@ function Model(modelName, collectionRef, collectionObj) {
 function Schema(schema, name, collectionRef, collectionObj) {
 	Model.call(this, name, collectionRef, collectionObj);
 	this.schema = schema;
-	if (this.schema === undefined) { throw "schema undefined" }
 	this.schemaCheck = function (queryObj) {
 		let entries = Object.entries(queryObj);
 		entries.forEach((valArr) => {
 			if (!(Object.getPrototypeOf(valArr[1]).constructor === this.schema[valArr[0]])) { throw "A Schema failure" };
 		});
+		return true
 	}
 };
 
@@ -105,8 +105,8 @@ fs.readdirSync(schemaDirectory)
 	.forEach((filename) => {
 		let tempName = filename.split('.')[0];
 		let schemaRef = require(path.join('../../', schemaDirectory, filename));
-		global[tempName] = new Schema(schemaRef[tempName], tempName, path.join(collecDirectory, tempName + '.json'), []);
-		global[tempName].findAll({});
+		exports[tempName] = new Schema(schemaRef[tempName], tempName, path.join(collecDirectory, tempName + '.json'), []);
+		exports[tempName].findAll({});
 		schemaNames.push(filename);
 	})
 
@@ -117,8 +117,8 @@ fs.readdirSync(collecDirectory)
 			let tmp = require(path.join('../../' + collecDirectory, nameArray[0]));
 			if (typeof tmp === "array" || typeof tmp === "object") {
 				let tempName = nameArray[0].charAt(0).toUpperCase() + nameArray[0].slice(1);
-				if (global[tempName]) { return }
-				global[tempName] = new Model(tempName, path.join(collecDirectory, filename), tmp);
+				if (exports[tempName]) { return }
+				exports[tempName] = new Model(tempName, path.join(collecDirectory, filename), tmp);
 				collecNames.push(filename);
 			}
 		}
