@@ -4,8 +4,8 @@ let collecDirectory = './collections';
 let schemaDirectory = './schemas'
 let collection = {};
 
-!fs.existsSync(collecDirectory) ? fs.mkdirSync(collecDirectory) : console.log('badcube found collections');
-!fs.existsSync(schemaDirectory) ? fs.mkdirSync(schemaDirectory) : console.log('badcube found schemas');
+!fs.existsSync(collecDirectory) ? fs.mkdirSync(collecDirectory) : console.log('badcube found collections folder');
+!fs.existsSync(schemaDirectory) ? fs.mkdirSync(schemaDirectory) : console.log('badcube found schemas folder');
 
 function Model(modelName, collectionRef, collectionObj) {
 
