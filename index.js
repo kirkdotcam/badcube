@@ -68,11 +68,11 @@ function Model(modelName, collectionRef, collectionObj) {
 		return queryObj;
 	};
 
-	this._collectionInsertion= function(newObj){
+	this._collectionInsertion = function (newObj) {
 		if (this instanceof Schema) {
 			this.schemaCheck(newObj);
 		}
-		if (typeof newObj === 'object'&& !Array.isArray(newObj)) {
+		if (typeof newObj === 'object' && !Array.isArray(newObj)) {
 			newObj._id = Math.random().toString(36).substring(2, 15);
 			newObj._createdDate = Date.now();
 			newObj._updatedDate = Date.now();
@@ -109,7 +109,7 @@ exports.collections = collection;
 fs.readdirSync(schemaDirectory)
 	.forEach((filename) => {
 		let tempName = filename.split('.')[0];
-		tempName =tempName.charAt(0).toUpperCase() +tempName.slice(1);
+		tempName = tempName.charAt(0).toUpperCase() + tempName.slice(1);
 		let schemaRef = require(path.join('../../', schemaDirectory, filename));
 		exports[tempName] = new Schema(schemaRef, tempName, path.join(collecDirectory, tempName + '.json'), []);
 		exports[tempName].findAll({});

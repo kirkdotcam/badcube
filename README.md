@@ -70,24 +70,10 @@ Oranges.schemaCheck({
 // THROWS an error
 ```
 
-Note that schemaCheck will _only_ check if the values for the properties of the _inserted_ object are equivalent to the constructor **listed in the schema**. To clarify,
-
-```js
-Oranges.schemaCheck({
-    variety: "Mandarin"
-});
-//returns true
-
-Oranges.schemaCheck({
-    seeds:33
-});
-//also returns true
-```
-
 ### Models
 The Model prototype contains several different functions for basic CRUD operations.
 
-Model.find(_queryObj_)
+- Model.find(_queryObj_)
 
 Model.find() currently allows searching for a single object by a single property.
 
@@ -106,7 +92,7 @@ returns
 */
 ```
 
-Model.findAll(_queryObj_)
+- Model.findAll(_queryObj_)
 
 Similar to .find(), .findAll() will grab _each_ instance of an object with a matching property and return them in an array.
 
@@ -131,7 +117,7 @@ returns
 
 Additionally, you can grab _all_ the objects in a collection by passing an empty object e.g. `Oranges.findAll({})`.
 
-Model.insert(_obj_)
+- Model.insert(_obj_)
 
 the `.insert()` method takes an object and inserts it into the appropriate JSON array, then rewrites the file. If the Model is a Schema, it first does a .schemaCheck() to ensure that the inserted object's values are from the right kind of constructor.
 
@@ -143,19 +129,20 @@ Oranges.insert({
 });
 ```
 The `.insert()` method also _returns_ the inserted object. The objet inserted into the database will contain three additional properties:
+
 - _id: a randomly generated identifier
 - _createdDate: UTC timestamp of time of record creation
 - _updatedDate: UTC timestamp of time of record modification
 
-Model.insertMany(_array of obj_)
+- Model.insertMany(_array of obj_)
 
 `.insertMany()` is analogous to `.insert()` but instead takes an array of objects.
 
-Model.update(_queryobj_,_toUpdateObj_)
+- Model.update(_queryobj_,_toUpdateObj_)
 
 `.update()` takes two arguments, the object to find in the database (has same rules as `find()`) and then updates the object with the properties in the toUpdateObj. This uses the Object.assign() method, and thus will update properties for those that already exist on the toUpdateObj and add those that are not there yet.
 
-Model.delete(_queryobj_)
+- Model.delete(_queryobj_)
 
 `.delete()` finds a record (same rules as `.find()`) and removes it from the json file.
 
